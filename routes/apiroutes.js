@@ -13,21 +13,21 @@ module.exports = function(app) {
        noteData.push(data) 
        res.json(noteData)
    })   
-   
-   console.log(noteData)
+
   });
   
   
   
   app.post("/api/notes", function(req, res) {
     
-    var newNote = req.body;
+    var newNote = JSON.stringify(req.body);
   
     console.log(newNote);
-    fs.appendFile(path.join(__dirname, "../db/db.json"), newNote, (err) => {
+    fs.appendFile(path.join(__dirname, "../db/db.json"), `[${newNote}]`, (err) => {
       if (err) throw err;
       console.log("Note saved successfully!")
+      res.json(newNote)
     });
-    res.json(true);
+    
   });
 }
