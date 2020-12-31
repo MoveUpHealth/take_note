@@ -9,9 +9,13 @@ module.exports = function(app) {
     
   fs.readFile(path.join(__dirname, "../db/db.json"), 'utf8', (err, data) => {
        if (err) throw err;
-       console.log(data)
-       noteData.push(data) 
-       res.json(noteData)
+       
+       var notes= JSON.parse(data) 
+       for( i = 0; i < notes.length; i ++){
+        noteData.push(notes[i])
+       }
+       return res.json(noteData)
+       
    })   
 
   });
@@ -20,13 +24,17 @@ module.exports = function(app) {
   
   app.post("/api/notes", function(req, res) {
     
-    var newNote = JSON.stringify(req.body);
-  
+    var newNote = req.body;
+    
     console.log(newNote);
-    fs.appendFile(path.join(__dirname, "../db/db.json"), `[${newNote}]`, (err) => {
+    noteData.push(newNote)
+    
+    var postedNotes = JSON.stringify(noteData)
+
+    fs.writeFile(path.join(__dirname, "../db/db.json"), postedNotes, (err) => {
       if (err) throw err;
       console.log("Note saved successfully!")
-      res.json(newNote)
+      return res.json(newNote)
     });
     
   });

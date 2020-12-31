@@ -133,7 +133,6 @@ const renderNoteList = (notes) => {
     const $li = create$li(note.title).data(note);
     noteListItems.push($li);
   });
-
   $noteList.append(noteListItems);
 };
 
